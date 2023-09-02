@@ -5,7 +5,6 @@ import dk.jannick.learnjda.managers.slashcommand.ISlashCommand;
 import dk.jannick.learnjda.managers.slashcommand.SlashCommandExecutionInfo;
 import dk.jannick.learnjda.utils.MessageUtils;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;

@@ -57,7 +57,7 @@ public class ReactionAddedToTicketMessage extends Event {
         } else if (Objects.requireNonNull(event.getButton().getId()).equalsIgnoreCase("delete")) {
             if (member.getRoles().contains(role)) {
                 client.getUser().openPrivateChannel()
-                        .flatMap(channel -> channel.sendMessage("Your ticket was deleted by **" + member.getUser().getEffectiveName() + "**"))
+                        .flatMap(channel -> channel.sendMessage("Your ticket was deleted by **" + member.getUser().getName() + "**"))
                         .queue();
                 ticketManager.removeTicket(client.getIdLong());
                 event.getChannel().delete().queue();

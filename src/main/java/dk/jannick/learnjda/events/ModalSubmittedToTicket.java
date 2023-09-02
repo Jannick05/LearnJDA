@@ -40,9 +40,8 @@ public class ModalSubmittedToTicket extends Event {
             MessageEmbed embed = new EmbedBuilder()
                     .setTitle(user.getName() + "'s Ticket")
                     .setColor(Color.decode("#2f3136"))
-                    .setDescription("**Topic** `" + topic + "`")
-                    .addField("Description", description, true)
-                    .setDescription("**Topic**")
+                    .setDescription("**TOPIC** `" + topic + "`")
+                    .addField("Description:", description, true)
                     .setFooter(user.getName(), user.getEffectiveAvatarUrl())
                     .build();
 

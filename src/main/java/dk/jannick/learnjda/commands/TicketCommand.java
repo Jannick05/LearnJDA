@@ -5,13 +5,11 @@ import dk.jannick.learnjda.managers.TicketManager;
 import dk.jannick.learnjda.managers.slashcommand.ASlashCommand;
 import dk.jannick.learnjda.managers.slashcommand.ISlashCommand;
 import dk.jannick.learnjda.managers.slashcommand.SlashCommandExecutionInfo;
-import dk.jannick.learnjda.utils.MessageUtils;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
@@ -27,7 +25,9 @@ public class TicketCommand implements ISlashCommand {
         Member member = info.getEvent().getMember();
         Long discordId = member.getIdLong();
         if (ticketManager.hasTicket(discordId)) {
-            info.getEvent().reply("You already have an existing ticket!").setEphemeral(true).queue();
+            String channelId = ticketManager.getTicket(discordId);
+            TextChannel ticket = info.getEvent().getGuild().getTextChannelById(channelId);
+            info.getEvent().reply("You already have an existing ticket! " + ticket.getAsMention()).setEphemeral(true).queue();
         } else {
             TextInput topic = TextInput.create("topic", "What's the ticket about?", TextInputStyle.SHORT)
                     .setPlaceholder("The topic")

@@ -57,7 +57,7 @@ public final class Main {
             jda.awaitReady();
 
             ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
-            executorService.scheduleAtFixedRate(FiveMManager::fetchData, 0, 5, TimeUnit.MINUTES);
+            executorService.scheduleAtFixedRate(FiveMManager::fetchData, 0, 1, TimeUnit.MINUTES);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
