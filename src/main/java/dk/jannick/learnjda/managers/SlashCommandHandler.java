@@ -2,6 +2,7 @@ package dk.jannick.learnjda.managers;
 
 import dk.jannick.learnjda.Main;
 import dk.jannick.learnjda.commands.SetupCommand;
+import dk.jannick.learnjda.commands.TicketCommand;
 import dk.jannick.learnjda.managers.slashcommand.ASlashCommand;
 import dk.jannick.learnjda.managers.slashcommand.ISlashCommand;
 import dk.jannick.learnjda.managers.slashcommand.SlashCommandExecutionInfo;
@@ -14,12 +15,17 @@ public class SlashCommandHandler {
 
     public SlashCommandHandler() {
         Main.getJDA().updateCommands().addCommands(
-                new SetupCommand().getSlashCommandData()
+                new SetupCommand().getSlashCommandData(),
+                new TicketCommand().getSlashCommandData()
         ).queue();
         try {
             addSlashCommand(
                     SetupCommand.class.getDeclaredMethod("execute", SlashCommandExecutionInfo.class).getAnnotation(ASlashCommand.class),
                     new SetupCommand()
+            );
+            addSlashCommand(
+                    TicketCommand.class.getDeclaredMethod("execute", SlashCommandExecutionInfo.class).getAnnotation(ASlashCommand.class),
+                    new TicketCommand()
             );
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

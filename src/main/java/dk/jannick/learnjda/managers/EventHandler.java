@@ -1,5 +1,7 @@
 package dk.jannick.learnjda.managers;
 
+import dk.jannick.learnjda.events.ModalSubmittedToTicket;
+import dk.jannick.learnjda.events.ReactionAddedToTicketMessage;
 import dk.jannick.learnjda.events.ReactionAddedToVerifyMessage;
 import dk.jannick.learnjda.managers.event.Event;
 
@@ -11,6 +13,8 @@ public class EventHandler {
 
     public EventHandler() {
         this.eventList.add(new ReactionAddedToVerifyMessage());
+        this.eventList.add(new ReactionAddedToTicketMessage());
+        this.eventList.add(new ModalSubmittedToTicket());
     }
 
     public List<Event> getEventList() {

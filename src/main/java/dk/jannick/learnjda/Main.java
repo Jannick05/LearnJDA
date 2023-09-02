@@ -1,7 +1,9 @@
 package dk.jannick.learnjda;
 
+import dk.jannick.learnjda.managers.DatabaseConnectionManager;
 import dk.jannick.learnjda.managers.EventHandler;
 import dk.jannick.learnjda.managers.SlashCommandHandler;
+import dk.jannick.learnjda.managers.TicketManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -13,6 +15,8 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 public final class Main {
     private static final String token = "OTI1NTY1NTA5MzAxMzIxODE4.Gwh6D6.66QjnzrL4Klvr8CEHrEJDVWKJPucyPYxdr6M4w";
     private static Main instance;
+    private static DatabaseConnectionManager databaseConnectionManager;
+    private static TicketManager ticketManager;
     private static SlashCommandHandler commandHandler;
     private static EventHandler eventHandler;
 
@@ -37,8 +41,10 @@ public final class Main {
 
     public static void main(String[] args) throws InterruptedException {
 
+        databaseConnectionManager = new DatabaseConnectionManager();
         commandHandler = new SlashCommandHandler();
         eventHandler = new EventHandler();
+        ticketManager = new TicketManager(databaseConnectionManager);
 
         jda.addEventListener(new dk.jannick.learnjda.managers.slashcommand.SlashCommandHandler());
         jda.addEventListener(new dk.jannick.learnjda.managers.event.EventHandler());
@@ -55,6 +61,10 @@ public final class Main {
 
     public static EventHandler getEventHandler() {
         return eventHandler;
+    }
+
+    public static TicketManager getTicketManager() {
+        return ticketManager;
     }
 
     private static JDA jda = start();
