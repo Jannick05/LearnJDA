@@ -1,5 +1,7 @@
 package dk.jannick.learnjda.events;
 
+import dk.jannick.learnjda.ConsoleGUI;
+import dk.jannick.learnjda.Main;
 import dk.jannick.learnjda.managers.event.Event;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.entities.Member;
@@ -8,6 +10,7 @@ import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 
+import java.awt.*;
 import java.util.Objects;
 
 public class ReactionAddedToVerifyMessage extends Event {
@@ -16,6 +19,7 @@ public class ReactionAddedToVerifyMessage extends Event {
     private static final String VERIFY_ROLE_ID = Dotenv.configure().load().get("VERIFY_ROLE_ID");
 
     public void execute(GenericEvent genericEvent) {
+        ConsoleGUI consoleGUI = Main.getConsoleGUI();
         ButtonInteractionEvent event = (ButtonInteractionEvent) genericEvent;
         if (Objects.requireNonNull(event.getUser()).isBot()) {
             return;
@@ -34,6 +38,7 @@ public class ReactionAddedToVerifyMessage extends Event {
                         .addRoleToMember(member, role);
                 action.queue();
                 event.reply("Du er blevet verificeret!").setEphemeral(true).queue();
+                consoleGUI.log(event.getMember().getUser().getName() + " verified", Color.CYAN);
             }
         }
     }

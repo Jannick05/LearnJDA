@@ -1,5 +1,6 @@
 package dk.jannick.learnjda.managers;
 
+import dk.jannick.learnjda.ConsoleGUI;
 import dk.jannick.learnjda.events.MemberJoinDiscord;
 import dk.jannick.learnjda.events.ModalSubmittedToTicket;
 import dk.jannick.learnjda.events.ReactionAddedToTicketMessage;

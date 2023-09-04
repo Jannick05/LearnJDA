@@ -1,5 +1,6 @@
 package dk.jannick.learnjda.events;
 
+import dk.jannick.learnjda.ConsoleGUI;
 import dk.jannick.learnjda.Main;
 import dk.jannick.learnjda.managers.TicketManager;
 import dk.jannick.learnjda.managers.event.Event;
@@ -24,6 +25,7 @@ public class ModalSubmittedToTicket extends Event {
     private static final String STAFF_ROLE_ID = Dotenv.configure().load().get("STAFF_ROLE_ID");
 
     public void execute(GenericEvent genericEvent) {
+        ConsoleGUI consoleGUI = Main.getConsoleGUI();
         ModalInteractionEvent event = (ModalInteractionEvent) genericEvent;
         if (Objects.requireNonNull(event.getUser()).isBot()) {
             return;
@@ -65,6 +67,7 @@ public class ModalSubmittedToTicket extends Event {
                         ticketManager.addTicket(member.getIdLong(), m.getChannel().getId());
                     });
             event.reply("You've created a ticket!").setEphemeral(true).queue();
+            consoleGUI.log(event.getMember().getUser().getName() + " made a ticket " + user.getName() + "-ticket", Color.CYAN);
         }
     }
 

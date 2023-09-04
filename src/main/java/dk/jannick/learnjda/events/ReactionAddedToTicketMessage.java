@@ -1,5 +1,6 @@
 package dk.jannick.learnjda.events;
 
+import dk.jannick.learnjda.ConsoleGUI;
 import dk.jannick.learnjda.Main;
 import dk.jannick.learnjda.managers.TicketManager;
 import dk.jannick.learnjda.managers.event.Event;
@@ -13,6 +14,7 @@ import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,6 +25,7 @@ public class ReactionAddedToTicketMessage extends Event {
     private static final String TICKET_CLOSED_CATEGORY_ID = Dotenv.configure().load().get("TICKET_CLOSED_CATEGORY_ID");
     private static final String STAFF_ROLE_ID = Dotenv.configure().load().get("STAFF_ROLE_ID");
     public void execute(GenericEvent genericEvent) {
+        ConsoleGUI consoleGUI = Main.getConsoleGUI();
         ButtonInteractionEvent event = (ButtonInteractionEvent) genericEvent;
         if (Objects.requireNonNull(event.getUser()).isBot()) {
             return;
@@ -49,6 +52,7 @@ public class ReactionAddedToTicketMessage extends Event {
                     if (!TICKET_CLOSED_CATEGORY_ID.equals("null")) {
                         event.getChannel().asTextChannel().getManager().setParent(event.getGuild().getCategoryById(TICKET_CLOSED_CATEGORY_ID)).queue();
                     }
+                    consoleGUI.log(event.getMember().getUser().getName() + " closed the ticket " + event.getChannel().getName(), Color.ORANGE);
                 } else {
                     event.replyEmbeds(MessageUtils.createErrorEmbed("You don't have the required permission!").build()).setEphemeral(true).queue();
                 }
@@ -67,6 +71,7 @@ public class ReactionAddedToTicketMessage extends Event {
                     if (!TICKET_OPEN_CATEGORY_ID.equals("null")) {
                         event.getChannel().asTextChannel().getManager().setParent(event.getGuild().getCategoryById(TICKET_OPEN_CATEGORY_ID)).queue();
                     }
+                    consoleGUI.log(event.getMember().getUser().getName() + " reopened the ticket " + event.getChannel().getName(), Color.GREEN);
                 } else {
                     event.replyEmbeds(MessageUtils.createErrorEmbed("You don't have the required permission!").build()).setEphemeral(true).queue();
                 }
@@ -77,6 +82,7 @@ public class ReactionAddedToTicketMessage extends Event {
                             .queue();
                     ticketManager.removeTicket(client.getIdLong());
                     event.getChannel().delete().queue();
+                    consoleGUI.log(event.getMember().getUser().getName() + " deleted the ticket " + event.getChannel().getName(), Color.RED);
                 } else {
                     event.replyEmbeds(MessageUtils.createErrorEmbed("You don't have the required permission!").build()).setEphemeral(true).queue();
                 }

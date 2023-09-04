@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +29,7 @@ public final class Main {
     private static TicketManager ticketManager;
     private static SlashCommandHandler commandHandler;
     private static EventHandler eventHandler;
+    private static ConsoleGUI consoleGUI;
 
     private static JDA start() {
         jda = JDABuilder
@@ -65,8 +67,15 @@ public final class Main {
             e.printStackTrace();
         }
         SwingUtilities.invokeLater(() -> {
-            ConsoleGUI consoleGUI = new ConsoleGUI();
+            consoleGUI = new ConsoleGUI();
             consoleGUI.openGUI();
+            consoleGUI.log("\n" +
+                    "███████╗███████╗███╗░░██╗████████╗██████╗░██╗██╗░░██╗\n" +
+                    "╚════██║██╔════╝████╗░██║╚══██╔══╝██╔══██╗██║╚██╗██╔╝\n" +
+                    "░░███╔═╝█████╗░░██╔██╗██║░░░██║░░░██████╔╝██║░╚███╔╝░\n" +
+                    "██╔══╝░░██╔══╝░░██║╚████║░░░██║░░░██╔══██╗██║░██╔██╗░\n" +
+                    "███████╗███████╗██║░╚███║░░░██║░░░██║░░██║██║██╔╝╚██╗\n" +
+                    "╚══════╝╚══════╝╚═╝░░╚══╝░░░╚═╝░░░╚═╝░░╚═╝╚═╝╚═╝░░╚═╝", new Color(53,158,3));
         });
     }
 
@@ -88,6 +97,10 @@ public final class Main {
 
     public static JDA getJDA() {
         return jda;
+    }
+
+    public static ConsoleGUI getConsoleGUI() {
+        return consoleGUI;
     }
 
     private static JDA jda = start();

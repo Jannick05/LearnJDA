@@ -1,6 +1,7 @@
 package dk.jannick.learnjda;
 
 import javax.swing.*;
+import javax.swing.text.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -8,27 +9,45 @@ import java.io.PrintStream;
 
 public class ConsoleGUI {
     private JFrame frame;
+    private JTextPane textPane;
+    private StyledDocument document;
 
     public void openGUI() {
         frame = new JFrame("ZentrixBOT Console");
 
-        JTextArea textArea = new JTextArea(24, 80);
-        textArea.setBackground(Color.BLACK);
-        textArea.setForeground(Color.LIGHT_GRAY);
-        textArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        textPane = new JTextPane();
+        textPane.setBackground(Color.BLACK);
+        textPane.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
+        document = textPane.getStyledDocument(); // Initialize the document
 
         System.setOut(new PrintStream(new OutputStream() {
             @Override
             public void write(int b) throws IOException {
-                textArea.append(String.valueOf((char) b));
+                appendText(String.valueOf((char) b), Color.LIGHT_GRAY);
             }
         }));
 
-        frame.add(new JScrollPane(textArea));
+        frame.add(new JScrollPane(textPane));
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
+        frame.setSize(new Dimension(605, 605));
         frame.setVisible(true);
+    }
+
+    public void log(String message, Color color) {
+        appendText(message + "\n", color);
+    }
+
+    private void appendText(String text, Color color) {
+        SimpleAttributeSet attributes = new SimpleAttributeSet();
+        StyleConstants.setForeground(attributes, color);
+        try {
+            document.insertString(document.getLength(), text, attributes);
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
     }
 }
