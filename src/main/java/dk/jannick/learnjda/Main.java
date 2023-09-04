@@ -14,13 +14,16 @@ import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
+import javax.swing.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public final class Main {
-    private static final String token = Dotenv.configure().load().get("TOKEN");
-    private static final String IP = Dotenv.configure().load().get("IP");
+
+    private static final Dotenv dotenv = Dotenv.configure().load();;
+    private static final String token = dotenv.get("TOKEN");
+    private static final String IP = dotenv.get("IP");
     private static DatabaseConnectionManager databaseConnectionManager;
     private static TicketManager ticketManager;
     private static SlashCommandHandler commandHandler;
@@ -61,7 +64,10 @@ public final class Main {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        ConsoleGUI.ConsoleGUI();
+        SwingUtilities.invokeLater(() -> {
+            ConsoleGUI consoleGUI = new ConsoleGUI();
+            consoleGUI.openGUI();
+        });
     }
 
     public static SlashCommandHandler getCommandHandler() {

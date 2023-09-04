@@ -46,7 +46,7 @@ public class ReactionAddedToTicketMessage extends Event {
                     ).queue();
                     event.getChannel().asTextChannel().getManager().putMemberPermissionOverride(client.getIdLong(), Collections.singleton(Permission.VIEW_CHANNEL), Collections.singleton(Permission.MESSAGE_SEND)).queue();
                     event.replyEmbeds(MessageUtils.createWarningEmbed("The ticket was closed.").build()).queue();
-                    if (TICKET_CLOSED_CATEGORY_ID.describeConstable().isPresent()) {
+                    if (!TICKET_CLOSED_CATEGORY_ID.equals("null")) {
                         event.getChannel().asTextChannel().getManager().setParent(event.getGuild().getCategoryById(TICKET_CLOSED_CATEGORY_ID)).queue();
                     }
                 } else {
@@ -64,7 +64,7 @@ public class ReactionAddedToTicketMessage extends Event {
                     perms.add(Permission.VIEW_CHANNEL);
                     event.getChannel().asTextChannel().getManager().putMemberPermissionOverride(client.getIdLong(), perms, null).queue();
                     event.replyEmbeds(MessageUtils.createSuccessEmbed("The ticket was reopened.").build()).queue();
-                    if (TICKET_OPEN_CATEGORY_ID.describeConstable().isPresent()) {
+                    if (!TICKET_OPEN_CATEGORY_ID.equals("null")) {
                         event.getChannel().asTextChannel().getManager().setParent(event.getGuild().getCategoryById(TICKET_OPEN_CATEGORY_ID)).queue();
                     }
                 } else {
