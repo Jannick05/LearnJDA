@@ -28,7 +28,6 @@ public class SetupCommand implements ISlashCommand {
                                 )
                 )
                 .queue();
-        //info.getEvent().reply("done!").queue();
     }
 
     @Override

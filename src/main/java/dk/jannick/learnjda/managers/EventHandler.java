@@ -1,5 +1,6 @@
 package dk.jannick.learnjda.managers;
 
+import dk.jannick.learnjda.events.MemberJoinDiscord;
 import dk.jannick.learnjda.events.ModalSubmittedToTicket;
 import dk.jannick.learnjda.events.ReactionAddedToTicketMessage;
 import dk.jannick.learnjda.events.ReactionAddedToVerifyMessage;
@@ -15,6 +16,7 @@ public class EventHandler {
         this.eventList.add(new ReactionAddedToVerifyMessage());
         this.eventList.add(new ReactionAddedToTicketMessage());
         this.eventList.add(new ModalSubmittedToTicket());
+        this.eventList.add(new MemberJoinDiscord());
     }
 
     public List<Event> getEventList() {

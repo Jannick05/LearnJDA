@@ -3,6 +3,7 @@ package dk.jannick.learnjda.events;
 import dk.jannick.learnjda.Main;
 import dk.jannick.learnjda.managers.TicketManager;
 import dk.jannick.learnjda.managers.event.Event;
+import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -19,12 +20,16 @@ import java.util.EnumSet;
 import java.util.Objects;
 
 public class ModalSubmittedToTicket extends Event {
-    private static final Long TICKET_CATEGORY_ID = 960901543182352384L;
-    private static final Long STAFF_ROLE_ID = 1147495900374126712L;
+    private static final String TICKET_OPEN_CATEGORY_ID = Dotenv.configure().load().get("TICKET_OPEN_CATEGORY_ID");
+    private static final String STAFF_ROLE_ID = Dotenv.configure().load().get("STAFF_ROLE_ID");
 
     public void execute(GenericEvent genericEvent) {
         ModalInteractionEvent event = (ModalInteractionEvent) genericEvent;
         if (Objects.requireNonNull(event.getUser()).isBot()) {
+            return;
+        }
+        if (TICKET_OPEN_CATEGORY_ID.equals("null")) {
+            event.reply("Contact an Administrator, there's an error!\n`TICKET_OPEN_CATEGORY_ID` needed!").setEphemeral(true).queue();
             return;
         }
         if (event.getModalId().equals("ticket")) {
@@ -33,7 +38,7 @@ public class ModalSubmittedToTicket extends Event {
             User user = member.getUser();
             String topic = event.getValue("topic").getAsString();
             String description = event.getValue("description").getAsString();
-            Category category = event.getGuild().getCategoryById(TICKET_CATEGORY_ID);
+            Category category = event.getGuild().getCategoryById(TICKET_OPEN_CATEGORY_ID);
             Long publicRole = event.getGuild().getPublicRole().getIdLong();
             EnumSet<Permission> permission = EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND);
 
@@ -47,7 +52,7 @@ public class ModalSubmittedToTicket extends Event {
 
             event.getGuild().createTextChannel(user.getName() + "-ticket", category)
                     .addRolePermissionOverride(publicRole, null, permission)
-                    .addRolePermissionOverride(STAFF_ROLE_ID, permission, null)
+                    .addRolePermissionOverride(Long.parseLong(STAFF_ROLE_ID), permission, null)
                     .addMemberPermissionOverride(member.getIdLong(), permission, null)
                     .flatMap(action -> action.sendMessageEmbeds(embed)
                             .setActionRow(

@@ -4,7 +4,8 @@ import dk.jannick.learnjda.managers.DatabaseConnectionManager;
 import dk.jannick.learnjda.managers.EventHandler;
 import dk.jannick.learnjda.managers.SlashCommandHandler;
 import dk.jannick.learnjda.managers.TicketManager;
-import dk.jannick.learnjda.managers.slashcommand.FiveMManager;
+import dk.jannick.learnjda.managers.FiveMManager;
+import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -18,16 +19,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public final class Main {
-    private static final String token = "OTI1NTY1NTA5MzAxMzIxODE4.Gwh6D6.66QjnzrL4Klvr8CEHrEJDVWKJPucyPYxdr6M4w";
-    private static Main instance;
+    private static final String token = Dotenv.configure().load().get("TOKEN");
+    private static final String IP = Dotenv.configure().load().get("IP");
     private static DatabaseConnectionManager databaseConnectionManager;
     private static TicketManager ticketManager;
     private static SlashCommandHandler commandHandler;
     private static EventHandler eventHandler;
-
-    public static JDA getJDA() {
-        return jda;
-    }
 
     private static JDA start() {
         jda = JDABuilder
@@ -56,12 +53,15 @@ public final class Main {
         try {
             jda.awaitReady();
 
-            ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
-            executorService.scheduleAtFixedRate(FiveMManager::fetchData, 0, 1, TimeUnit.MINUTES);
+            if (!IP.equals("null")) {
+                ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+                executorService.scheduleAtFixedRate(FiveMManager::fetchData, 0, 1, TimeUnit.MINUTES);
+            }
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        ConsoleGUI.ConsoleGUI();
     }
 
     public static SlashCommandHandler getCommandHandler() {
@@ -74,6 +74,14 @@ public final class Main {
 
     public static TicketManager getTicketManager() {
         return ticketManager;
+    }
+
+    public static DatabaseConnectionManager getDatabaseConnectionManager() {
+        return databaseConnectionManager;
+    }
+
+    public static JDA getJDA() {
+        return jda;
     }
 
     private static JDA jda = start();

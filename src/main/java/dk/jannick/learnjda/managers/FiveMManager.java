@@ -1,9 +1,10 @@
-package dk.jannick.learnjda.managers.slashcommand;
+package dk.jannick.learnjda.managers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.jannick.learnjda.Main;
 import dk.jannick.learnjda.utils.FiveMUtils;
+import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.entities.Activity;
 
 import java.io.BufferedReader;
@@ -13,12 +14,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class FiveMManager {
+    private static final String IP = Dotenv.configure().load().get("IP");
     public static void fetchData() {
         try {
-            FiveMUtils fiveMUtils = new FiveMUtils();
-            String apiUrl = "http://89.23.86.7:30120/dynamic.json";
 
-            URL url = new URL(apiUrl);
+            URL url = new URL("http://"+IP+"/dynamic.json");
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
@@ -39,17 +39,14 @@ public class FiveMManager {
                 JsonNode jsonNode = objectMapper.readTree(response.toString());
 
                 int clients = jsonNode.get("clients").asInt();
-                fiveMUtils.setClients(clients);
                 String gametype = jsonNode.get("gametype").asText();
-                fiveMUtils.setGametype(gametype);
                 String hostname = jsonNode.get("hostname").asText();
-                fiveMUtils.setHostname(hostname);
                 String mapname = jsonNode.get("mapname").asText();
-                fiveMUtils.setMapname(mapname);
                 int svMaxClients = jsonNode.get("sv_maxclients").asInt();
-                fiveMUtils.setMaxClients(svMaxClients);
 
-                Main.getJDA().getPresence().setActivity(Activity.watching(fiveMUtils.getClients() + " players \uD83D\uDE97"));
+                FiveMUtils fiveMUtils = new FiveMUtils(clients, gametype, hostname, mapname, svMaxClients);
+
+                Main.getJDA().getPresence().setActivity(Activity.watching(fiveMUtils.clients + " players \uD83D\uDE97"));
             } else {
                 System.out.println("HTTP Request failed with response code: " + responseCode);
             }

@@ -1,6 +1,7 @@
 package dk.jannick.learnjda.events;
 
 import dk.jannick.learnjda.managers.event.Event;
+import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.GenericEvent;
@@ -11,21 +12,29 @@ import java.util.Objects;
 
 public class ReactionAddedToVerifyMessage extends Event {
 
-    private static final String LINK_CHANNEL_ID = "958380341901549588";
+    private static final String VERIFY_CHANNEL_ID = Dotenv.configure().load().get("VERIFY_CHANNEL_ID");
+    private static final String VERIFY_ROLE_ID = Dotenv.configure().load().get("VERIFY_ROLE_ID");
 
     public void execute(GenericEvent genericEvent) {
         ButtonInteractionEvent event = (ButtonInteractionEvent) genericEvent;
         if (Objects.requireNonNull(event.getUser()).isBot()) {
             return;
         }
-        if (event.getChannel().getId().equals(LINK_CHANNEL_ID) && Objects.requireNonNull(event.getButton().getId()).equalsIgnoreCase("verifyButton")) {
-            Member member = event.getMember();
-            Role role = event.getGuild().getRoleById(958380098061467648L);
-            AuditableRestAction<Void> action = event
-                    .getGuild()
-                    .addRoleToMember(member, role);
-            action.queue();
-            event.reply("Du er blevet verificeret!").setEphemeral(true).queue();
+        String buttonId = Objects.requireNonNull(event.getButton().getId());
+        if (buttonId.equalsIgnoreCase("verifyButton")) {
+            if (VERIFY_CHANNEL_ID.equals("null")) {
+                event.reply("Contact an Administrator, there's an error!\n`VERIFY_CHANNEL_ID` needed!").setEphemeral(true).queue();
+                return;
+            }
+            if (event.getChannel().getId().equals(VERIFY_CHANNEL_ID) && Objects.requireNonNull(event.getButton().getId()).equalsIgnoreCase("verifyButton")) {
+                Member member = event.getMember();
+                Role role = event.getGuild().getRoleById(VERIFY_ROLE_ID);
+                AuditableRestAction<Void> action = event
+                        .getGuild()
+                        .addRoleToMember(member, role);
+                action.queue();
+                event.reply("Du er blevet verificeret!").setEphemeral(true).queue();
+            }
         }
     }
 
