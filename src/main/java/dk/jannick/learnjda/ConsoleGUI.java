@@ -33,7 +33,7 @@ public class ConsoleGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
-        frame.setSize(new Dimension(605, 605));
+        frame.setSize(new Dimension(610, 610));
         frame.setVisible(true);
     }
 
