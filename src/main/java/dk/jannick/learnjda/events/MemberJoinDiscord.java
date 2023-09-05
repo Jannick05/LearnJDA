@@ -1,6 +1,6 @@
 package dk.jannick.learnjda.events;
 
-import dk.jannick.learnjda.ConsoleGUI;
+import dk.jannick.learnjda.console.ConsoleGUI;
 import dk.jannick.learnjda.Main;
 import dk.jannick.learnjda.managers.event.Event;
 import io.github.cdimascio.dotenv.Dotenv;

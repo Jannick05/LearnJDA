@@ -1,5 +1,6 @@
 package dk.jannick.learnjda;
 
+import dk.jannick.learnjda.console.ConsoleGUI;
 import dk.jannick.learnjda.managers.DatabaseConnectionManager;
 import dk.jannick.learnjda.managers.EventHandler;
 import dk.jannick.learnjda.managers.SlashCommandHandler;

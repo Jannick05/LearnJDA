@@ -1,10 +1,6 @@
 package dk.jannick.learnjda.managers;
 
-import dk.jannick.learnjda.ConsoleGUI;
-import dk.jannick.learnjda.events.MemberJoinDiscord;
-import dk.jannick.learnjda.events.ModalSubmittedToTicket;
-import dk.jannick.learnjda.events.ReactionAddedToTicketMessage;
-import dk.jannick.learnjda.events.ReactionAddedToVerifyMessage;
+import dk.jannick.learnjda.events.*;
 import dk.jannick.learnjda.managers.event.Event;
 
 import java.util.ArrayList;
@@ -18,6 +14,7 @@ public class EventHandler {
         this.eventList.add(new ReactionAddedToTicketMessage());
         this.eventList.add(new ModalSubmittedToTicket());
         this.eventList.add(new MemberJoinDiscord());
+        this.eventList.add(new MemberLeaveDiscord());
     }
 
     public List<Event> getEventList() {
