@@ -1,5 +1,9 @@
 package dk.jannick.learnjda.managers;
 
+import dk.jannick.learnjda.Main;
+import dk.jannick.learnjda.console.ConsoleGUI;
+
+import java.awt.*;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;

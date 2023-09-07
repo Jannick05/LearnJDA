@@ -9,10 +9,13 @@ import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.UserSnowflake;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.requests.restaction.CacheRestAction;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -34,7 +37,12 @@ public class ReactionAddedToTicketMessage extends Event {
         if (buttonId.equalsIgnoreCase("close") || buttonId.equalsIgnoreCase("open") || buttonId.equalsIgnoreCase("delete")) {
             TicketManager ticketManager = Main.getTicketManager();
             Member member = event.getMember();
-            Member client = event.getGuild().getMemberById(ticketManager.getTicket(event.getChannel().getId()));
+
+            UserSnowflake user = User.fromId(ticketManager.getTicket(event.getChannel().getId()));
+            Long userId = user.getIdLong();
+            CacheRestAction<Member> cache = Objects.requireNonNull(event.getGuild()).retrieveMemberById(userId);
+            Member client = cache.complete();
+
             if (STAFF_ROLE_ID.equals("null")) {
                 event.reply("Contact an Administrator, there's an error!\n`STAFF_ROLE_ID` needed!").setEphemeral(true).queue();
                 return;
